@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'home_page.dart';
+import 'location_service.dart'; // Konum servisi için eklendi
 
 class CitySelectionPage extends StatefulWidget {
   @override
@@ -61,7 +62,9 @@ class _CitySelectionPageState extends State<CitySelectionPage> {
                 );
               }).toList(),
             ),
+
             SizedBox(height: 20),
+
             ElevatedButton(
               onPressed: selectedCity == null
                   ? null
@@ -70,7 +73,30 @@ class _CitySelectionPageState extends State<CitySelectionPage> {
                       goToHome();
                     },
               child: Text("Kaydet ve Devam Et"),
-            )
+            ),
+
+            SizedBox(height: 20),
+
+            ElevatedButton.icon(
+              icon: Icon(Icons.my_location),
+              label: Text("Konumdan Şehri Al"),
+              onPressed: () async {
+                String? locationCity = await LocationService().getCityFromLocation();
+
+                if (locationCity != null && cities.contains(locationCity)) {
+                  setState(() {
+                    selectedCity = locationCity;
+                  });
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("Konumdan şehir alındı: $locationCity")),
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("Şehir bulunamadı ya da desteklenmiyor")),
+                  );
+                }
+              },
+            ),
           ],
         ),
       ),

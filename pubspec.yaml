@@ -9,14 +9,16 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+
   cupertino_icons: ^1.0.8
 
   # Gerekli ek paketler:
   http: ^0.13.6                      # API'den veri çekmek için
-  geolocator: ^10.0.0               # Konum bilgisi almak için
-  shared_preferences: ^2.2.0        # Yerel veri kaydı (şehir seçimi vs.)
+  geolocator: ^10.0.0                # Konum bilgisi almak için
+  geocoding: ^2.2.0                  # Konumdan şehir bulmak için
+  shared_preferences: ^2.2.0         # Yerel veri kaydı (şehir seçimi vs.)
   flutter_local_notifications: ^16.0.0  # Bildirim göndermek için
-  intl: ^0.18.1                      # Tarih-saat formatlama
+  intl: ^0.18.1                     # Tarih-saat formatlama
 
 dev_dependencies:
   flutter_test:
