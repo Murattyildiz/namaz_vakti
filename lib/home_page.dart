@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'prayer_time_service.dart';
 
 class HomePage extends StatefulWidget {
@@ -7,26 +8,29 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final String city = "Istanbul";
+  String city = "Istanbul";
   Map<String, String>? prayerTimes;
   bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    getPrayerTimes();
+    loadCityAndTimes();
   }
 
-  Future<void> getPrayerTimes() async {
-    try {
-      final times = await PrayerTimeService().fetchPrayerTimes(city);
-      setState(() {
-        prayerTimes = times;
-        isLoading = false;
-      });
-    } catch (e) {
-      print("Hata oluştu: $e");
+  Future<void> loadCityAndTimes() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? savedCity = prefs.getString('selectedCity');
+
+    if (savedCity != null) {
+      city = savedCity;
     }
+
+    final times = await PrayerTimeService().fetchPrayerTimes(city);
+    setState(() {
+      prayerTimes = times;
+      isLoading = false;
+    });
   }
 
   @override
